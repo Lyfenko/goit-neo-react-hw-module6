@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectContacts, deleteContact } from '../../redux/contactsSlice';
 import { selectNameFilter } from '../../redux/filtersSlice';
+import Contact from '../Contact/Contact'; // Імпортуємо компонент Contact
 import styles from './ContactList.module.css';
 
 const ContactList = () => {
@@ -18,13 +19,19 @@ const ContactList = () => {
 
   const filteredContacts = getFilteredContacts();
 
+  const handleDelete = id => {
+    dispatch(deleteContact(id));
+  };
+
   return (
     <ul className={styles.contactList}>
       {filteredContacts.map(({ id, name, number }) => (
-        <li key={id} className={styles.contactItem}>
-          <span>{name}: {number}</span>
-          <button onClick={() => dispatch(deleteContact(id))}>Delete</button>
-        </li>
+        <Contact
+          key={id}
+          name={name}
+          number={number}
+          onDelete={() => handleDelete(id)} // Передаємо функцію для видалення
+        />
       ))}
     </ul>
   );
